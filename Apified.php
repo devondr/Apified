@@ -50,7 +50,9 @@ class Core
             $conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             return $conn;
         } catch (\PDOException $e) {
-            echo "Connection failed: " . $e->getMessage();
+            http_response_code(500);
+            util_encode(["error" => "Could not connect to the database. This is a server-side problem, please contact the administrator with this message.", "message" => $e->getMessage()]);
+            exit;
         }
     }
 
@@ -76,6 +78,7 @@ class Core
 
             if ($settings['url.actionRequired'] == true) {
                 if (!isset($_GET['action'])) {
+                    http_response_code(400);
                     util_encode(['error' => 'No action specified']);
                     exit;
                 }
@@ -98,6 +101,7 @@ class Actions
     {
         global $ac_array;
         if (@$ac_array[$name] != null) {
+            http_response_code(500);
             util_encode(['error' => "Action with name '$name' already exists"]);
             return;
         }
@@ -108,6 +112,7 @@ class Actions
     {
         global $ac_array;
         if (@$ac_array[$name] != null) {
+            http_response_code(500);
             util_encode(['error' => "Action with name '$name' already exists"]);
             return;
         }
@@ -118,6 +123,7 @@ class Actions
     {
         global $ac_array;
         if (@$ac_array[$name] == null) {
+            http_response_code(404);
             util_encode(['error' => "Unknown action '$name'"]);
             return;
         }
@@ -126,12 +132,14 @@ class Actions
                 if ($ac_array[$name]['method'] == 'GET') {
                     foreach ($ac_array[$name]['args'] as $arg) {
                         if (!isset($_GET[$arg])) {
+                            http_response_code(400);
                             util_encode(['error' => "Missing argument '$arg'"]);
                             return;
                         }
                         $ac_params[$arg] = $_GET[$arg];
                     }
                 } else {
+                    http_response_code(405);
                     util_encode(['error' => 'Invalid method']);
                     return;
                 }
@@ -141,12 +149,14 @@ class Actions
                     $json = json_decode(file_get_contents('php://input'), true);
                     foreach ($ac_array[$name]['args'] as $arg) {
                         if (!isset($json[$arg])) {
+                            http_response_code(400);
                             util_encode(['error' => "Missing argument '$arg'"]);
                             return;
                         }
                         $ac_params[$arg] = $json[$arg];
                     }
                 } else {
+                    http_response_code(405);
                     util_encode(['error' => 'Invalid method']);
                     return;
                 }
