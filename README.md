@@ -1,4 +1,4 @@
-# 💡 Introduction
+# 🗃 Apified
 
 ## About Apified
 
@@ -6,7 +6,7 @@ Apified is made to create APIs easier. It's simple, just drop in and play. Apifi
 
 ## How to get it?
 
-It's very simple! Just download the lastest release from GitHub and extract it into your project! To learn how to use it, please see [get-started.md](get-started.md "mention").
+It's very simple! Just download the lastest release from GitHub and drop the file into your project! Learn how to use it at [Broken link](broken-reference "mention").
 
 ## Developers
 
