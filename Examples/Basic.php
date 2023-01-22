@@ -2,10 +2,7 @@
 
 include_once './Apified.php';
 
-$api = new Apified\Core([
-    "url.enabled" => true,
-    "url.actionRequired" => true
-]);
+$api = new Apified\Core([]);
 $ac = new Apified\Actions();
 
 function helloWorld($params)
@@ -14,5 +11,7 @@ function helloWorld($params)
 }
 
 $ac->get('helloWorld', 'helloWorld', ['name']);
+
+$ac->exec('helloWorld');
 
 $api->init();
